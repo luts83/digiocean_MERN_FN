@@ -1,0 +1,957 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #1a3c34, #2a5c54);
+    padding: 15px 5%;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: white;
+    text-decoration: none;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-menu {
+    position: relative;
+}
+
+.nav-menu::after {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-right: 1px dashed rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s ease;
+}
+
+.nav-menu:hover::after {
+    background-color: #ffd700;
+    border-right: 1px dashed #ffd700;
+}
+
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+}
+
+.nav-menu ul li {
+    margin-left: 25px;
+}
+
+.nav-menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-menu ul li a:hover {
+    color: #ffd700;
+}
+
+.nav-menu ul li a.active {
+    color: #ffd700;
+    font-weight: bold;
+    border-bottom: 2px solid #ffd700;
+}
+
+.auth-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth-icon {
+    font-size: 1.2rem;
+    color: #ffd700;
+    margin-right: 5px;
+}
+
+.auth-btn {
+    color: white;
+    background-color: #28a745;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.auth-btn:hover {
+    background-color: #218838;
+}
+
+#logoutLink {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+/* 모달 스타일 */
+.auth-page {
+    position: relative; /* auth-page는 모달의 부모로, 위치에 영향을 주지 않도록 설정 */
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 중앙 정렬을 위해 transform 사용 */
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.auth-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.auth-tab.active {
+    background-color: #fff;
+    border-bottom: 2px solid #1a3c34;
+    font-weight: bold;
+    color: #1a3c34;
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.auth-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #1a3c34;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #1a3c34;
+}
+
+.form-group textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    resize: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group textarea:focus {
+    border-color: #1a3c34;
+}
+
+/* 버튼 스타일 통합 */
+.submit-btn,
+.edit-btn,
+.delete-btn,
+.save-btn,
+.logout-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.submit-btn {
+    background-color: #1a3c34;
+    color: white;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #2a5c54;
+    transform: translateY(-1px);
+}
+
+.edit-btn {
+    background-color: #ffd700;
+    color: #333;
+    margin-right: 5px;
+}
+
+.edit-btn:hover {
+    background-color: #ffeb3b;
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #ff6666;
+    transform: translateY(-1px);
+}
+
+.save-btn {
+    background-color: #1a3c34;
+    color: white;
+    width: 100px;
+}
+
+.save-btn:hover {
+    background-color: #2a5c54;
+    transform: translateY(-1px);
+}
+
+.logout-btn {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.logout-btn:hover {
+    background-color: #ff6666;
+    transform: translateY(-1px);
+}
+
+/* 탭 스타일 */
+.tabs-container {
+    background-color: #fff;
+    padding: 10px 5%;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.tabs {
+    display: flex;
+    list-style: none;
+}
+
+.tab {
+    margin-right: 20px;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab:hover {
+    color: #1a3c34;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.tab.active {
+    color: #1a3c34;
+    font-weight: bold;
+    border-bottom: 3px solid #1a3c34;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+    display: flex;
+    justify-content: center;
+    padding: 40px 5%;
+}
+
+.content-box {
+    background-color: #fff;
+    padding: 30px;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.content-box:hover {
+    transform: translateY(-5px);
+}
+
+.content-meta {
+    margin-bottom: 15px;
+}
+
+.date {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.content-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #1a3c34;
+    line-height: 1.3;
+}
+
+.content-intro {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.content-body {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.content-list {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.content-list li {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+
+.highlight-box {
+    background: linear-gradient(135deg, #f9f9f9, #f0f0f0);
+    padding: 20px;
+    border-left: 4px solid #1a3c34;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.highlight-box strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    color: #1a3c34;
+}
+
+.highlight-box ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.highlight-box ul li {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+
+/* 리뷰 페이지 스타일 */
+.review-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.review-form {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.review-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #1a3c34;
+}
+
+.review-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-size: 16px;
+}
+
+.review-list {
+    margin-top: 30px;
+}
+
+.review-list h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #1a3c34;
+}
+
+.review-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.review-content {
+    font-size: 16px;
+    margin-bottom: 5px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.review-author {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.review-date {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.review-item .edit-form {
+    display: none;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.review-item .edit-form.active {
+    display: block;
+}
+
+.review-item .edit-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+/* 유저 관리 페이지 스타일 */
+.user-management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-management-header h2 {
+    font-size: 1.5rem;
+    color: #1a3c34;
+}
+
+.user-search {
+    display: flex;
+    gap: 10px;
+}
+
+#userSearchInput {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    width: 200px;
+}
+
+#userSearchBtn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    background-color: #1a3c34;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#userSearchBtn:hover {
+    background-color: #2a5c54;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-table th {
+    background-color: #1a3c34;
+    color: white;
+    font-weight: bold;
+}
+
+.user-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.user-table .edit-form {
+    display: none;
+    margin-top: 10px;
+}
+
+.user-table .edit-form.active {
+    display: block;
+}
+
+.user-table .edit-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+/* 계정 관리 페이지 스타일 */
+.account-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.account-details h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #1a3c34;
+}
+
+.account-details .form-group p {
+    font-size: 1rem;
+    color: #555;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.account-details .form-group input[readonly] {
+    background-color: #fff;
+    cursor: not-allowed;
+}
+
+.account-details .delete-btn {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+/* 팝업 스타일 */
+.popup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, #ff4d4d, #ff6666);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.5s ease;
+    max-width: 90%;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup p {
+    margin-right: 20px;
+}
+
+.subscribe-btn {
+    background-color: #fff;
+    color: #ff4d4d;
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.subscribe-btn:hover {
+    background-color: #ffd700;
+    color: #333;
+}
+
+.close-btn {
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.auth-link {
+    background: none;
+    border: none;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+.auth-link:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+/* 관리자 페이지 스타일 */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background-color: #1a3c34;
+    color: white;
+    padding: 20px;
+}
+
+.admin-sidebar-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.admin-sidebar-menu {
+    list-style: none;
+}
+
+.admin-sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.admin-sidebar-menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.admin-sidebar-menu li a:hover {
+    background-color: #2a5c54;
+}
+
+.admin-sidebar-menu li a.active {
+    background-color: #ffd700;
+    color: #1a3c34;
+    font-weight: bold;
+}
+
+.admin-main {
+    flex: 1;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.admin-header h1 {
+    font-size: 1.5rem;
+    color: #1a3c34;
+}
+
+.admin-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-dashboard h2,
+.admin-user-management h2,
+.admin-review-management h2,
+.admin-settings h2 {
+    font-size: 1.5rem;
+    color: #1a3c34;
+    margin-bottom: 20px;
+}
+
+.dashboard-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card h3 {
+    font-size: 1.2rem;
+    color: #1a3c34;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.admin-user-management .user-search input {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    width: 200px;
+}
+
+.admin-user-management .user-table select {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* 애니메이션 */
+@keyframes slideUp {
+    from {
+        transform: translateX(-50%) translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .header {
+        padding: 15px 3%;
+    }
+
+    .nav-menu ul li {
+        margin-left: 15px;
+    }
+
+    .header-right {
+        gap: 20px;
+    }
+
+    .nav-menu::after {
+        right: -10px;
+        height: 25px;
+    }
+
+    .admin-container {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .admin-sidebar-menu li a {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-right {
+        margin-top: 10px;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .nav-menu {
+        width: 100%;
+    }
+
+    .nav-menu::after {
+        display: none;
+    }
+
+    .nav-menu ul {
+        flex-wrap: wrap;
+    }
+
+    .nav-menu ul li {
+        margin: 5px 15px 5px 0;
+    }
+
+    .auth-section {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+
+    .dashboard-stats {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .nav-menu ul li a {
+        font-size: 0.9rem;
+    }
+
+    .auth-btn {
+        padding: 4px 8px;
+        font-size: 0.9rem;
+    }
+
+    .auth-icon {
+        font-size: 1rem;
+    }
+
+    .admin-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .admin-header-right span {
+        font-size: 0.9rem;
+    }
+}
